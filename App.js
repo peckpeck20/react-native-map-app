@@ -1,21 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View, TextInput, Button,Alert } from "react-native";
-import { MapView } from "expo";
+import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
+import { MapView, Location, Permissions } from "expo";
 import axios from "axios";
 //import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-  
-//creates marker
-  // const markerComponent = (props) =>{
-  //   return <MapView.Marker
-  //   coordinate={{
-  //     latitude: {props.lat},
-  //     longitude: {props.lon}
-  //   }}
-  //   title="Haaga-Helia"
-  // />
 
-  const latitudeDelta =  0.0922
-  const longitudeDelta = 0.0421
+//creates marker
+// const markerComponent = (props) =>{
+//   return <MapView.Marker
+//   coordinate={{
+//     latitude: {props.lat},
+//     longitude: {props.lon}
+//   }}
+//   title="Haaga-Helia"
+// />
+
+const latitudeDelta = 0.0922;
+const longitudeDelta = 0.0421;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -23,19 +23,19 @@ export default class App extends React.Component {
 
     this.state = {
       data: {},
-      initialPosition:{
+      initialPosition: {
         latitude: 0,
         longitude: 0,
         latitudeDelta: 0,
         longitudeDelta: 0
       },
-      markerPosition:{
-        latitude:0,
-        longitude :0
+      markerPosition: {
+        latitude: 0,
+        longitude: 0
       },
-      searchPosition:{
-        latitude:0,
-        longitude :0
+      searchPosition: {
+        latitude: 0,
+        longitude: 0
       },
       address: "",
       region: "",
@@ -57,19 +57,18 @@ export default class App extends React.Component {
       .get(urlPath)
       .then(response => {
         //console.log(urlPath);
-        console.log(data.geometry.location)
+        console.log(data.geometry.location);
         const data = response.data.results[0]; //.geometry.location
         this.setState({ data });
-        
 
         let searchPosition = {
-          latitude:data.geometry.location.latitude,
-          longitude :data.geometry.location.longitude
-        }
+          latitude: data.geometry.location.latitude,
+          longitude: data.geometry.location.longitude
+        };
         //console.log(searchPosition);
 
         // this.setState({
-        //   searchPosition 
+        //   searchPosition
         // })
       })
       .catch(error => {
@@ -82,31 +81,30 @@ export default class App extends React.Component {
     navigator.geolocation.getCurrentPosition(
       position => {
         //change txt to float number
-        let lat = parseFloat(position.coords.latitude)
-        let long =parseFloat(position.coords.longitude)
+        let lat = parseFloat(position.coords.latitude);
+        let long = parseFloat(position.coords.longitude);
 
         let initialRegion = {
-          latitude:lat,
-          longitude :long,
+          latitude: lat,
+          longitude: long,
           latitudeDelta: latitudeDelta,
-          longitudeDelta : longitudeDelta 
-        }
-        
+          longitudeDelta: longitudeDelta
+        };
+
         this.setState({
           initialPosition: initialRegion,
           //always follow marker
-          markerPosition : initialRegion
+          markerPosition: initialRegion
         });
         console.log("myLocation set");
-
       },
       error => Alert(JSON.stringify(error)),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 }
     );
   }
 
-  componentDidMount(){
-    this.getLocation()
+  componentDidMount() {
+    this.getLocation();
   }
 
   // createMarker(props){
@@ -116,28 +114,19 @@ export default class App extends React.Component {
   //       <Callout>
   //         <MyCustomCalloutView {...marker} />
   //       </Callout>
-  //     </Marker> 
+  //     </Marker>
   //   )
   // }
 
-  getSF() { 
-    this.setState({
-      
-    })
-  }
+  // getSF() {
+  //   this.setState({
+
+  //   })
+  // }
 
   // onRegionChange(region) {
   //   this.setState({ region });
   // }
-
-  render() {
-    return (
-      <MapView
-        region={this.state.region}
-        onRegionChange={this.onRegionChange}
-      />
-    );
-  }
 
   render() {
     //Dark custom map
@@ -378,29 +367,29 @@ export default class App extends React.Component {
     const LatLng = {
       latitude: 60.170789,
       longitude: 24.9410169
-    }
+    };
     return (
       <View style={styles.container}>
         <TextInput
           style={styles.txtPosition}
           onChangeText={address => this.setState({ address })}
         />
-        <Button color={'red'} title="Search" onPress={this.onClickfetchData} />
+        <Button color={"red"} title="Search" onPress={this.onClickfetchData} />
         <Button title="Find me" onPress={this.getLocation} />
 
         {/* <Button title="e" onPress={e => console.log(e.nativeEvent)} /> */}
 
         <MapView
-          showsUserLocation = {true}
-          userLocationAnnotationTitle={'me'}
+          showsUserLocation={true}
+          userLocationAnnotationTitle={"me"}
           followsUserLocation={true}
-          provider={'google'}
+          provider={"google"}
           // mapType={'terrain'}
           showsIndoorLevelPicker={true}
           customMapStyle={mapStyle}
           //loader
           loadingEnabled={true}
-          loadingIndicatorColor={'#606060'}
+          loadingIndicatorColor={"#606060"}
           //css
           style={{
             flex: 1
@@ -428,7 +417,6 @@ export default class App extends React.Component {
             }}
             title="Crib"
           />
-          
         </MapView>
       </View>
     );
